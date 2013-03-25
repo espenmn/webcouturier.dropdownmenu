@@ -45,6 +45,40 @@ class DropdownMenuViewlet(common.GlobalSectionsViewlet):
     """
     implements(IDropdownMenuViewlet)
 
+    def selectedTabs(self, default_tab='index_html', portal_tabs=()):
+        """ correct seeming error in plone.app.layout with line 67
+        testing path against action_path with an extra /, which won't
+        work for navigationRoot 
+        """            
+        plone_url = getToolByName(self.context, 'portal_url')()
+        plone_url_len = len(plone_url)
+        request = self.request
+        valid_actions = []
+
+        url = request['URL']
+        path = url[plone_url_len:]
+
+        for action in portal_tabs:
+            if not action['url'].startswith(plone_url):
+                # In this case the action url is an external link. Then, we
+                # avoid issues (bad portal_tab selection) continuing with next
+                # action.
+                continue
+            action_path = action['url'][plone_url_len:]
+            if not action_path.startswith('/'):
+                action_path = '/' + action_path
+            if path.startswith(action_path):  # + '/'
+                # Make a list of the action ids, along with the path length
+                # for choosing the longest (most relevant) path.
+                valid_actions.append((len(action_path), action['id']))
+
+        # Sort by path length, the longest matching path wins
+        valid_actions.sort()
+        if valid_actions:
+            return {'portal' : valid_actions[-1][1]}
+
+        return {'portal' : default_tab}    
+
     #
     # Define a cache key: every instance (probabily only one per site,
     # language and user gets its/his own cache so we don't get the
