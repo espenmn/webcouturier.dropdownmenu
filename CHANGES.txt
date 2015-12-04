@@ -33,6 +33,8 @@ Changelog
 - Register resource directory to enable csscompilation entry in registry.xml
   [davilima6]
 
+- Fixed image vocabulary and condition for showing icons in drop down menu.
+  [espenmn]
 
 2.3.1 (2012-07-26)
 ------------------

@@ -50,6 +50,10 @@
   top: 0;
   left: 100%;
 }
+
+.submenu_description {
+	display: block;
+}
 @media (max-width: 768px) {
   /* line 52, http://localhost:8080/Plone/++plone++dropdown/dropdown.less */
   .plone-navbar-nav li .submenu {
