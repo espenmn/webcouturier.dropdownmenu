@@ -2,7 +2,9 @@
 from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
 from Products.CMFCore.utils import getToolByName
 from plone import api
-#from zope.schema.interfaces import IVocabularyFactory
+
+from zope.schema.interfaces import IVocabularyFactory
+from zope.interface import directlyProvides
 
 from webcouturier.dropdownmenu import msg_fact as _
 
@@ -18,13 +20,8 @@ def format_size(size):
 def SizeVocabulary(context):
     site = getSite()
     #default vocabulary if everything else fails
-    sizes = None
-    terms = [
-            SimpleTerm('mini', 'mini', u'Mini'),
-            SimpleTerm('preview', 'preview', u'Preview'),
-            SimpleTerm('icon', 'icon', u'Icon'),
-            SimpleTerm('none', 'none', u'none'),
-        ]
+    sizes = []
+    terms = []
         
     try:
         #Plone 5
@@ -36,10 +33,17 @@ def SizeVocabulary(context):
             sizes = portal_properties.imaging_properties.getProperty('allowed_sizes')
 
     if sizes:
-        if not 'none' in sizes:
-            sizes += ('none',)
         terms = [ SimpleTerm(value=format_size(pair), token=format_size(pair), title=pair) for pair in sizes ]
+        
+    if not 'none' in terms:    
+        terms.append(SimpleVocabulary.createTerm('none', 'none', u'None'))
       
     return SimpleVocabulary(terms)
     
+ 
+  
+ 
+ 
+
+
  
