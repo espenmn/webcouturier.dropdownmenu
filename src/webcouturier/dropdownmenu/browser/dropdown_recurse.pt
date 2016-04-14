@@ -18,7 +18,6 @@
                 item_remote_url node/getRemoteUrl;
                 use_remote_url  node/useRemoteUrl | nothing;
                 item_type       node/portal_type;
-                item_icon       nocall:node/item_icon;
                 my_item         node/item;
                 absolute_url    nocall:python:my_item.getObject().absolute_url;
                 normalizeString nocall: context/plone_utils/normalizeString;"
